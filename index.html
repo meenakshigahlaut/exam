@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scope Technologies - Online Exam Portal</title>
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <img class="logo" id="logo" src="logo.png" alt="Logo">
+  <div class="brandbox"><b id="brand">Scope Technologies</b><small>Innovative Solutions, Training Solution</small></div>
+  <nav id="topNav"><button class="ghost" id="navStudent" onclick="go('home')">Student</button><button class="ghost" id="navAdmin" onclick="go(admin?'admin':'login')">Admin</button></nav>
+</header>
+
+<main class="wrap">
+ <div id="toast" class="toast hide"></div>
+
+ <!-- STUDENT HOME -->
+ <section id="v-home">
+  <div class="hero"><h1>Welcome 👋</h1><p>Choose your exam and get started. Best of luck!</p></div>
+  <div class="grid" id="examList"></div>
+ </section>
+
+ <!-- STUDENT DETAILS -->
+ <section id="v-details" class="hide">
+  <div class="card">
+   <h2 id="dTitle" style="margin-top:0"></h2>
+   <p class="muted" id="dMeta"></p>
+   <div class="row"><div><label>Name *</label><input id="sName"></div><div><label>Roll Number *</label><input id="sRoll"></div></div>
+   <div class="row"><div><label>Class / Course</label><input id="sCls"></div><div><label>Phone / Email</label><input id="sContact"></div></div>
+   <div class="warn">⚠️ If you open a new tab, switch tabs or leave this window during the exam, the exam will end immediately.</div>
+   <button class="acc" id="bStart" onclick="startExam()">Start Exam →</button>
+   <button class="grey" id="bBack" onclick="go('home')">Back</button>
+  </div>
+ </section>
+
+ <!-- EXAM -->
+ <section id="v-exam" class="hide">
+  <div class="bar"><b id="eTitle"></b><span class="timer" id="timer"></span></div>
+  <div id="qs"></div>
+  <button class="acc" onclick="finish('Submitted by student')">Submit ✓</button>
+ </section>
+
+ <!-- THANK YOU -->
+ <section id="v-thanks" class="hide"><div class="card thanks" id="thanksBox"></div></section>
+
+ <!-- ADMIN LOGIN -->
+ <section id="v-login" class="hide">
+  <div class="card" style="max-width:380px;margin:30px auto">
+   <h2 style="margin-top:0">🔐 Admin Login</h2>
+   <label>Password</label><input type="password" id="pw" onkeydown="if(event.key==='Enter')login()">
+   <button onclick="login()">Login</button>
+   <p class="err" id="loginErr"></p>
+  </div>
+ </section>
+
+ <!-- ADMIN -->
+ <section id="v-admin" class="hide">
+  <div class="tabs">
+   <button id="t1" class="on" onclick="tab(1)">➕ New Exam</button>
+   <button id="t2" onclick="tab(2)">📚 My Exams</button>
+   <button id="t3" onclick="tab(3)">📊 Results</button>
+   <button id="t4" onclick="tab(4)">👤 Students &amp; Links</button>
+   <button onclick="logout()" class="del" style="margin-left:auto">Logout</button>
+  </div>
+
+  <div id="a1">
+   <div class="card">
+    <h3 id="formTitle" style="margin-top:0">New Exam</h3>
+    <div class="warn">📥 <b>Import from Excel / CSV</b> — put each question in the <b>Question</b> column and its answer in the <b>Answer</b> column. Multiple choice: Question | Option A-D | Correct Answer (A/B/C/D). Typed answer: just Question | Answer. Column headings are detected automatically. Samples: <a href="sample-questions.xlsx" download>multiple choice</a> · <a href="sample-typed-answers.xlsx" download>typed answers</a></div>
+    <input type="file" id="xlFile" accept=".xlsx,.xls,.csv" onchange="importExcel(this)">
+    <label>Exam name *</label><input id="xTitle" placeholder="e.g. Maths Unit Test 1">
+    <div class="row"><div><label>Time (minutes)</label><input id="xMin" type="number" value="10" min="1"></div>
+    <div><label>Show result to student?</label><select id="xShow"><option value="1">Yes, show score</option><option value="0">No, show Thank You only</option></select></div></div>
+   </div>
+   <div id="builder"></div>
+   <button class="grey" onclick="addQ()">+ Add Question</button>
+   <button class="acc" id="saveBtn" onclick="saveExam()">💾 Save Exam</button>
+   <button class="grey hide" id="cancelEdit" onclick="resetForm();tab(2)">Cancel Edit</button>
+  </div>
+
+  <div id="a2" class="hide"></div>
+
+  <div id="a3" class="hide">
+   <div class="card">
+    <div class="row">
+     <div><label>Filter by exam</label><select id="rFilter" onchange="renderResults()"></select></div>
+     <div><label>&nbsp;</label><button class="grey" style="margin:0" onclick="exportCsv()">⬇ Download CSV</button></div>
+    </div>
+    <p class="muted" id="rLive"></p>
+   </div>
+   <div id="rList"></div>
+  </div>
+
+  <div id="a4" class="hide">
+   <div class="card">
+    <h3 style="margin-top:0">Add Student</h3>
+    <label>Select exam *</label><select id="stExam"></select>
+    <div class="row"><div><label>Name *</label><input id="stName"></div><div><label>Roll Number *</label><input id="stRoll"></div></div>
+    <div class="row"><div><label>Class / Course</label><input id="stCls"></div><div><label>WhatsApp number / Email</label><input id="stContact" placeholder="9876543210"></div></div>
+    <button class="acc" onclick="addStudent()">+ Add Student</button>
+   </div>
+   <div id="stList"></div>
+  </div>
+ </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
